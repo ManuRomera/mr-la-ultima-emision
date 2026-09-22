@@ -1,5 +1,5 @@
 name: Bootstrap MR-La Ultima Emision
-# trigger
+# trigger chunks
 
 on:
   push:
@@ -26,7 +26,7 @@ jobs:
       - name: Restore repository source
         shell: bash
         run: |
-          base64 --decode .bootstrap/source.b64 > /tmp/mr-lue.tgz
+          cat .bootstrap/chunk00 .bootstrap/chunk01 .bootstrap/chunk02 .bootstrap/chunk03 .bootstrap/chunk04 | base64 --decode > /tmp/mr-lue.tgz
           mkdir -p /tmp/mr-lue
           tar -xzf /tmp/mr-lue.tgz -C /tmp/mr-lue
           cp -a /tmp/mr-lue/. .
