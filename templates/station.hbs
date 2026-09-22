@@ -1,0 +1,115 @@
+<div class="mr-lue-app-shell mr-lue-station-shell">
+  <header class="mr-lue-app-header">
+    <div>
+      <span class="mr-lue-kicker">MR · RADIO CONTROL</span>
+      <h1>{{publicState.stationName}}</h1>
+      <p>{{publicState.programName}}</p>
+    </div>
+    <button type="button" class="mr-lue-onair {{#if publicState.onAir}}active{{/if}}" data-action="toggle-on-air" data-mr-lue-help="Activa o detiene el estado EN DIRECTO sin cerrar la consola.">
+      <span></span>{{#if publicState.onAir}}{{localize "MRLUE.OnAir"}}{{else}}{{localize "MRLUE.OffAir"}}{{/if}}
+    </button>
+  </header>
+
+  <nav class="mr-lue-tabs" role="tablist" aria-label="MR-La Última Emisión">
+    <button type="button" role="tab" data-mr-lue-tab-target="broadcast">{{localize "MRLUE.Broadcast"}}</button>
+    <button type="button" role="tab" data-mr-lue-tab-target="calls">{{localize "MRLUE.Calls"}}</button>
+    <button type="button" role="tab" data-mr-lue-tab-target="interference">{{localize "MRLUE.Interference"}}</button>
+    <button type="button" role="tab" data-mr-lue-tab-target="tools">{{localize "MRLUE.Tools"}}</button>
+  </nav>
+
+  <main class="mr-lue-app-content">
+    <section class="mr-lue-tab-panel" data-mr-lue-tab-panel="broadcast">
+      <div class="mr-lue-broadcast-grid">
+        <article class="mr-lue-surface mr-lue-broadcast-copy">
+          <div class="mr-lue-field-grid">
+            <label>{{localize "MRLUE.StationName"}}<input name="stationName" value="{{publicState.stationName}}"></label>
+            <label>{{localize "MRLUE.ProgramName"}}<input name="programName" value="{{publicState.programName}}"></label>
+          </div>
+          <label>{{localize "MRLUE.Headline"}}<input name="headline" value="{{publicState.headline}}"></label>
+          <label class="mr-lue-flex-field">{{localize "MRLUE.StatusLine"}}<textarea name="statusLine">{{publicState.statusLine}}</textarea></label>
+          <button type="button" class="mr-lue-primary" data-action="save-public"><i class="fas fa-tower-broadcast"></i> {{localize "MRLUE.UpdatePublic"}}</button>
+        </article>
+
+        <aside class="mr-lue-surface mr-lue-signal-panel">
+          <span class="mr-lue-kicker">{{localize "MRLUE.Signal"}}</span>
+          <div class="mr-lue-signal-value">{{publicState.signal}} <small>/ {{publicState.signalMax}}</small></div>
+          <div class="mr-lue-signal-segments" aria-label="{{localize "MRLUE.Signal"}} {{publicState.signal}} / {{publicState.signalMax}}">
+            {{#each signalSegments}}<span class="{{#if on}}on{{/if}}"></span>{{/each}}
+          </div>
+          <div class="mr-lue-button-row">
+            <button type="button" data-action="signal-down"><i class="fas fa-minus"></i> {{localize "MRLUE.SignalDown"}}</button>
+            <button type="button" data-action="signal-up"><i class="fas fa-plus"></i> {{localize "MRLUE.SignalUp"}}</button>
+          </div>
+          <div class="mr-lue-live-summary">
+            <span>{{localize "MRLUE.LiveCall"}}</span>
+            {{#if publicState.activeCall}}<strong>{{publicState.activeCall.caller}}</strong><small>{{publicState.activeCall.frequency}}</small>{{else}}<em>{{localize "MRLUE.NoLiveCall"}}</em>{{/if}}
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="mr-lue-tab-panel" data-mr-lue-tab-panel="calls" hidden>
+      <div class="mr-lue-calls-layout">
+        <div class="mr-lue-call-desk">
+          <article class="mr-lue-live-call mr-lue-surface">
+            <div class="mr-lue-section-head"><span class="mr-lue-kicker">{{localize "MRLUE.LiveCall"}}</span>{{#if liveCall}}<span class="mr-lue-badge live">{{localize "MRLUE.OnAir"}}</span>{{/if}}</div>
+            {{#if liveCall}}
+              <div class="mr-lue-live-call-main"><div><h2>{{liveCall.caller}}</h2><small>{{liveCall.frequency}}</small><p>{{liveCall.note}}</p></div><div class="mr-lue-actions"><button type="button" class="mr-lue-primary" data-action="close-call" data-id="{{liveCall.id}}"><i class="fas fa-phone-slash"></i> {{localize "MRLUE.CloseCall"}}</button></div></div>
+            {{else}}<div class="mr-lue-empty">{{localize "MRLUE.NoLiveCall"}}</div>{{/if}}
+          </article>
+
+          <article class="mr-lue-surface mr-lue-queue-panel">
+            <div class="mr-lue-section-head"><div><span class="mr-lue-kicker">{{localize "MRLUE.Queue"}}</span><h2>{{pendingCalls.length}}</h2></div></div>
+            {{#if pendingCalls.length}}
+              <div class="mr-lue-call-list mr-lue-scroll-region">
+                {{#each pendingCalls}}
+                  <div class="mr-lue-call-row" title="{{note}}">
+                    <div class="mr-lue-call-id"><strong>{{caller}}</strong><small>{{frequency}}</small></div>
+                    <p>{{note}}</p>
+                    <div class="mr-lue-actions"><button type="button" class="mr-lue-primary" data-action="start-call" data-id="{{id}}">{{localize "MRLUE.PutOnAir"}}</button><button type="button" data-action="drop-call" data-id="{{id}}">{{localize "MRLUE.DropCall"}}</button><button type="button" class="icon-only danger" data-action="remove-call" data-id="{{id}}" title="{{localize "MRLUE.Remove"}}"><i class="fas fa-trash"></i></button></div>
+                  </div>
+                {{/each}}
+              </div>
+            {{else}}<div class="mr-lue-empty">{{localize "MRLUE.EmptyQueue"}}</div>{{/if}}
+          </article>
+
+          <details class="mr-lue-surface mr-lue-history-panel">
+            <summary><span>{{localize "MRLUE.History"}}</span><b>{{oldCalls.length}}</b></summary>
+            {{#if oldCalls.length}}<div class="mr-lue-call-list mr-lue-scroll-region history">{{#each oldCalls}}<div class="mr-lue-call-row history"><div class="mr-lue-call-id"><strong>{{caller}}</strong><small>{{frequency}}</small></div><p>{{note}}</p><span class="mr-lue-badge">{{statusLabel}}</span></div>{{/each}}</div>{{else}}<div class="mr-lue-empty">{{localize "MRLUE.EmptyHistory"}}</div>{{/if}}
+          </details>
+        </div>
+
+        <aside class="mr-lue-surface mr-lue-new-call">
+          <span class="mr-lue-kicker">{{localize "MRLUE.NewCall"}}</span>
+          <label>{{localize "MRLUE.Caller"}}<input name="newCallCaller"></label>
+          <label>{{localize "MRLUE.Frequency"}}<input name="newCallFrequency"></label>
+          <label class="mr-lue-flex-field">{{localize "MRLUE.Note"}}<textarea name="newCallNote"></textarea></label>
+          <button type="button" class="mr-lue-primary" data-action="add-call"><i class="fas fa-plus"></i> {{localize "MRLUE.NewCall"}}</button>
+        </aside>
+      </div>
+    </section>
+
+    <section class="mr-lue-tab-panel" data-mr-lue-tab-panel="interference" hidden>
+      <div class="mr-lue-two-column-fill">
+        <article class="mr-lue-surface mr-lue-writing-panel">
+          <span class="mr-lue-kicker">{{localize "MRLUE.Interference"}}</span>
+          <textarea name="interferenceText" placeholder="Ruido, voz, corte, señal ajena…">{{publicState.interference.text}}</textarea>
+          <div class="mr-lue-button-row"><button type="button" class="mr-lue-primary" data-action="emit-interference"><i class="fas fa-bolt"></i> {{localize "MRLUE.Emit"}}</button><button type="button" data-action="clear-interference">{{localize "MRLUE.Clear"}}</button></div>
+        </article>
+        <article class="mr-lue-surface mr-lue-writing-panel private">
+          <span class="mr-lue-kicker">{{localize "MRLUE.PrivateNote"}}</span>
+          <textarea name="privateNote" placeholder="Solo el Locutor/GM ve esta nota…">{{privateState.privateNote}}</textarea>
+          <button type="button" data-action="save-private"><i class="fas fa-floppy-disk"></i> {{localize "MRLUE.SavePrivate"}}</button>
+        </article>
+      </div>
+    </section>
+
+    <section class="mr-lue-tab-panel" data-mr-lue-tab-panel="tools" hidden>
+      <div class="mr-lue-tools-grid">
+        <article class="mr-lue-surface"><span class="mr-lue-kicker">{{localize "MRLUE.PublicPanel"}}</span><div class="mr-lue-tool-buttons"><button type="button" data-action="toggle-overlay">{{#if publicState.overlay.visible}}{{localize "MRLUE.Hide"}}{{else}}{{localize "MRLUE.Show"}}{{/if}}</button><button type="button" data-action="toggle-overlay-lock">{{#if publicState.overlay.locked}}{{localize "MRLUE.Unlock"}}{{else}}{{localize "MRLUE.Lock"}}{{/if}}</button><button type="button" data-action="overlay-wider">{{localize "MRLUE.Wider"}}</button><button type="button" data-action="overlay-narrower">{{localize "MRLUE.Narrower"}}</button><button type="button" data-action="center-overlay">{{localize "MRLUE.Center"}}</button></div></article>
+        <article class="mr-lue-surface"><span class="mr-lue-kicker">MR · UTILIDADES</span><div class="mr-lue-tool-buttons"><button type="button" data-action="ensure-macros"><i class="fas fa-wand-magic-sparkles"></i> {{localize "MRLUE.EnsureMacros"}}</button><button type="button" data-action="reset-windows"><i class="fas fa-window-restore"></i> {{localize "MRLUE.ResetWindows"}}</button><button type="button" data-action="diagnostics"><i class="fas fa-stethoscope"></i> {{localize "MRLUE.Diagnostics"}}</button></div></article>
+        <article class="mr-lue-surface danger-zone"><span class="mr-lue-kicker">ZONA DE PELIGRO</span><p>Restablece únicamente el estado público de la emisora.</p><button type="button" class="danger" data-action="reset-public"><i class="fas fa-triangle-exclamation"></i> {{localize "MRLUE.ResetBroadcast"}}</button></article>
+      </div>
+    </section>
+  </main>
+</div>

@@ -1,0 +1,17 @@
+<div class="mr-lue-app-shell mr-lue-listener-shell">
+  <header class="mr-lue-app-header compact">
+    <div><span class="mr-lue-kicker">MR · LISTENER LINE</span><h1>{{localize "MRLUE.Listener"}}</h1><p>{{publicState.stationName}} · {{publicState.programName}}</p></div>
+    <div class="mr-lue-listener-signal"><span>{{localize "MRLUE.Signal"}}</span><strong>{{publicState.signal}}/{{publicState.signalMax}}</strong></div>
+  </header>
+  <main class="mr-lue-listener-content">
+    <section class="mr-lue-listener-identity mr-lue-surface">
+      <div class="mr-lue-field-grid"><label>{{localize "MRLUE.Alias"}}<input name="alias" value="{{alias}}" placeholder="{{user.name}}"></label><label>{{localize "MRLUE.ListenerFrequency"}}<input name="frequency" value="{{frequency}}" placeholder="97.3 FM"></label></div>
+    </section>
+    <section class="mr-lue-listener-request mr-lue-surface">
+      <div class="mr-lue-section-head"><div><span class="mr-lue-kicker">{{localize "MRLUE.RequestCall"}}</span><h2>{{#if publicState.onAir}}{{localize "MRLUE.OnAir"}}{{else}}{{localize "MRLUE.OffAir"}}{{/if}}</h2></div></div>
+      <label class="mr-lue-flex-field">{{localize "MRLUE.CallReason"}}<textarea name="callNote" placeholder="Quiero entrar en antena porque…"></textarea></label>
+      <button type="button" class="mr-lue-primary" data-action="request-call" {{#unless publicState.onAir}}disabled{{/unless}}><i class="fas fa-phone"></i> {{localize "MRLUE.RequestCall"}}</button>
+    </section>
+    {{#if publicState.activeCall}}<section class="mr-lue-now-playing"><span>{{localize "MRLUE.LiveCall"}}</span><strong>{{publicState.activeCall.caller}}</strong><small>{{publicState.activeCall.frequency}}</small></section>{{/if}}
+  </main>
+</div>
