@@ -1,0 +1,65 @@
+name: Bootstrap MR-La Ultima Emision
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/bootstrap.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Restore repository source
+        shell: bash
+        run: |
+          base64 --decode .bootstrap/source.b64 > /tmp/mr-lue.tgz
+          mkdir -p /tmp/mr-lue
+          tar -xzf /tmp/mr-lue.tgz -C /tmp/mr-lue
+          cp -a /tmp/mr-lue/. .
+          rm -rf .bootstrap
+
+      - name: Validate and build
+        shell: bash
+        run: |
+          npm test
+          npm run check
+          npm run build
+
+      - name: Commit project
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Release MR-La Ultima Emision v1.0.0"
+          git push origin HEAD:main
+
+      - name: Tag
+        shell: bash
+        run: |
+          git tag -f v1.0.0
+          git push origin -f v1.0.0
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh release delete v1.0.0 --yes 2>/dev/null || true
+          gh release create v1.0.0 dist/mr-la-ultima-emision.zip dist/module.json \
+            --title "MR-La Última Emisión v1.0.0" \
+            --notes "Primera versión estable. Idea y obra original de La Última Llamada: MIDRA · Midespinas & Amdra. Implementación técnica del módulo para Foundry VTT: Manu Romera. Módulo agnóstico de sistema para Foundry VTT 13/14 con consola de Locutor, panel de Oyentes, llamadas concurrentes, señal, interferencias, overlay público, memoria de ventanas, accesibilidad, macros y API." \
+            --latest
