@@ -1,0 +1,32 @@
+name: Release MR-La Ultima Emision
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate
+        run: |
+          npm test
+          npm run check
+          npm run build
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh release create "${GITHUB_REF_NAME}" dist/mr-la-ultima-emision.zip dist/module.json \
+            --title "MR-La Última Emisión ${GITHUB_REF_NAME#v}" \
+            --notes "Idea y obra original de La Última Llamada: MIDRA · Midespinas & Amdra. Implementación técnica del módulo para Foundry VTT: Manu Romera." \
+            --latest
