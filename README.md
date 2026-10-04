@@ -29,6 +29,13 @@ El GM adopta el papel de **Locutor** y dispone de una mesa de emisión completa.
 
 > **La idea original, el concepto creativo y la obra de La Última Llamada pertenecen a MIDRA · Midespinas & Amdra.** Manu Romera es el creador de esta implementación modular para Foundry VTT, no del concepto original.
 
+## Así se ve
+
+<p align="center">
+  <img src="docs/img/consola.png" alt="Consola del Locutor: emisión, llamadas, interferencias y herramientas" width="68%">
+  <img src="docs/img/panel-publico.png" alt="Panel público en directo sobre la escena con la señal 5/6" width="30%">
+</p>
+
 ## Funciones
 
 | Emisión | Oyentes | Mesa del Locutor | Calidad de vida |
