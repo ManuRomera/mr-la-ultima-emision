@@ -6,9 +6,11 @@
 
 **Una emisora de radio interactiva y agnóstica de sistema para Foundry VTT.**
 
-[![Foundry VTT](https://img.shields.io/badge/Foundry%20VTT-13%20%7C%2014-efbd5e?style=for-the-badge)](#compatibilidad)
-[![Release](https://img.shields.io/github/v/release/ManuRomera/mr-la-ultima-emision?style=for-the-badge&label=release)](https://github.com/ManuRomera/mr-la-ultima-emision/releases/latest)
-[![Idioma](https://img.shields.io/badge/i18n-ES%20%7C%20EN-27363a?style=for-the-badge)](#funciones)
+  <a href="https://github.com/ManuRomera/mr-la-ultima-emision/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/ManuRomera/mr-la-ultima-emision?include_prereleases&style=for-the-badge&color=b8860b&label=release"></a>
+  <a href="https://foundryvtt.com"><img alt="Foundry VTT V13 – V14" src="https://img.shields.io/badge/Foundry%20VTT-V13%20%E2%80%93%20V14-57d8c8?style=for-the-badge"></a>
+  <a href="https://github.com/ManuRomera/mr-la-ultima-emision/releases"><img alt="Downloads" src="https://img.shields.io/github/downloads/ManuRomera/mr-la-ultima-emision/total?style=for-the-badge&color=ff7a1f"></a>
+  <img alt="System" src="https://img.shields.io/badge/system-agnostic-2b3245?style=for-the-badge">
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-2b3245?style=for-the-badge"></a>
 
 **Idea y obra original:** **MIDRA · Midespinas & Amdra**  
 **Implementación del módulo para Foundry VTT:** **Manu Romera**
